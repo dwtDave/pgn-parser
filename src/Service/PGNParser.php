@@ -7,6 +7,7 @@ use HueHue\PgnParser\Struct\Move;
 use HueHue\PgnParser\Struct\PGN;
 use HueHue\PgnParser\Struct\Tag;
 use HueHue\PgnParser\Validator\ChessNotationValidator;
+use HueHue\PgnParser\Validator\TagValidator;
 
 /**
  * PHP PGN Parser
@@ -37,7 +38,7 @@ class PGNParser
 		foreach ($lines as $line) {
 			$line = trim($line);
 			if (empty($line)) {
-				continue; // Skip empty lines
+				continue; 
 			}
 			if (!str_starts_with($line, '[')) {
 				$tagsParsing = false;
@@ -61,24 +62,6 @@ class PGNParser
 
 		return $pgn;
 	}
-
-	/**
-	 * Parses a single PGN tag from a string.
-	 *
-	 * @param string $tagString The tag string (e.g., "[Event \"Example\"]").
-	 * @return Tag The parsed Tag object.
-	 * @throws Exception if the tag string is malformed.
-	 */
-	private static function parseTag(string $tagString): Tag 
-	{
-		if (preg_match('/\[(\w+)\s"(.*?)"]/', $tagString, $matches)) {
-			$tagName = $matches[1];
-			$tagValue = $matches[2];
-			return new Tag($tagName, $tagValue);
-		}
-
-		throw new Exception("Invalid tag format: $tagString");
-	}
 	
 	/**
 	 * Parses the move text from a PGN string and adds Move objects to the PGN object.
@@ -94,34 +77,8 @@ class PGNParser
 		$moveText = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $moveText); // remove result.  Do not remove.
 
 		$explodedMoves = explode(' ', $moveText);
-		$moves = [];
-		$moveCount = count($explodedMoves);
-		$parts = [];
-		$startChar = '';
-		for ($i = 1; $i < $moveCount; $i++) {
-			if (!str_starts_with($explodedMoves[$i], '{') && !str_starts_with($explodedMoves[$i], '(')) {
-				$moves[] = $explodedMoves[$i];
-				continue;
-			}
-			
-			if($explodedMoves[$i][0] !== $startChar) {
-				$startChar = $explodedMoves[$i][0];
-			}
 
-			do {
-				$parts[] = $explodedMoves[$i];
-				if(str_ends_with($explodedMoves[$i], self::$charStartEndMapping[$startChar])) {
-					$fullString = implode(' ', $parts);
-					$moves[] = $fullString;
-					
-					$parts = [];
-					
-					break;
-				}
-				$i++;
-			}while (true);
-		}
-		
+		$moves = self::prepareMoves($explodedMoves);
 		$moveNumber = 1;
 		$isWhiteMove = true;
 		$currentMove = null;
@@ -131,21 +88,17 @@ class PGNParser
 			}
 			
 			if (str_starts_with($moveStr, '{')) {
-				$comment = substr($moveStr, 1, -1); 
-				
-				if ($currentMove) {
-					$currentMove->setComment($comment);
-				}
+				$comment = substr($moveStr, 1, -1);
+
+				$currentMove?->setComment($comment);
 				
 				continue;
 			}
 
 			if (str_starts_with($moveStr, '(')) {
 				$variation = substr($moveStr, 1, -1);
-				
-				if ($currentMove) {
-					$currentMove->addVariation($variation);
-				}
+
+				$currentMove?->addVariation($variation);
 				
 				continue;
 			}
@@ -158,7 +111,7 @@ class PGNParser
 			$move = new Move($moveStr, $moveNumber, $isWhiteMove);
 			$pgn->addMove($move);
 			
-			$currentMove = $move; // Update current move.
+			$currentMove = $move;
 
 			if ($isWhiteMove) {
 				$moveNumber++;
@@ -167,4 +120,65 @@ class PGNParser
 			$isWhiteMove = !$isWhiteMove;
 		}
 	}
+
+	/**
+	 * Parses a single PGN tag from a string.
+	 *
+	 * @param string $tagString The tag string (e.g., "[Event \"Example\"]").
+	 * @return Tag The parsed Tag object.
+	 * @throws Exception if the tag string is malformed.
+	 */
+	private static function parseTag(string $tagString): Tag
+	{
+		$tagValidator = new TagValidator();
+		if(!$tagValidator->isValid($tagString)){
+			throw new Exception("Invalid tag format: $tagString");
+		}
+
+		preg_match('/\[(\w+)\s"(.*?)"]/', $tagString, $matches);
+
+		$tagName = $matches[1];
+		$tagValue = $matches[2];
+
+		return new Tag($tagName, $tagValue);
+	}
+
+	/**
+	 * Combine variations and comments to one again after explode
+	 *
+	 * @param array $notPreparedMoves
+	 * @return array
+	 */
+	private static function prepareMoves(array $notPreparedMoves): array
+	{
+		$moves = [];
+		$moveCount = count($notPreparedMoves);
+		$parts = [];
+		$startChar = '';
+		for ($i = 1; $i < $moveCount; $i++) {
+			if (!str_starts_with($notPreparedMoves[$i], '{') && !str_starts_with($notPreparedMoves[$i], '(')) {
+				$moves[] = $notPreparedMoves[$i];
+				continue;
+			}
+
+			if($notPreparedMoves[$i][0] !== $startChar) {
+				$startChar = $notPreparedMoves[$i][0];
+			}
+
+			do {
+				$parts[] = $notPreparedMoves[$i];
+				if(str_ends_with($notPreparedMoves[$i], self::$charStartEndMapping[$startChar])) {
+					$fullString = implode(' ', $parts);
+					$moves[] = $fullString;
+
+					$parts = [];
+
+					break;
+				}
+				$i++;
+			}while (true);
+		}
+		return $moves;
+	}
+
 }
