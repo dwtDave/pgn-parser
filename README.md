@@ -1,4 +1,8 @@
 # PHP PGN Parser
+[![Latest Stable Version](http://poser.pugx.org/huehue/pgn-parser/v)](https://packagist.org/packages/huehue/pgn-parser)
+[![Total Downloads](http://poser.pugx.org/huehue/pgn-parser/downloads)](https://packagist.org/packages/huehue/pgn-parser)
+[![License](http://poser.pugx.org/huehue/pgn-parser/license)](https://packagist.org/packages/huehue/pgn-parser)
+
 A PHP library for parsing Portable Game Notation (PGN) files. This parser is designed to extract chess game metadata, moves, and variations from PGN strings.
 
 ## Features
