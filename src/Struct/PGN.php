@@ -5,7 +5,8 @@ namespace HueHue\PgnParser\Struct;
 /**
  * Represents a parsed PGN game.
  */
-class PGN {
+class PGN 
+{
 	/**
 	 * @var Tag[] An array of Tag objects.
 	 */
@@ -30,7 +31,8 @@ class PGN {
 	 *
 	 * @param Move $move The Move object to add.
 	 */
-	public function addMove(Move $move): void {
+	public function addMove(Move $move): void 
+	{
 		$this->moves[] = $move;
 	}
 
@@ -59,7 +61,8 @@ class PGN {
 	 *
 	 * @return string
 	 */
-	public function __toString(): string {
+	public function __toString(): string 
+	{
 		$tagString = "";
 		foreach ($this->tags as $tag) {
 			$tagString .= $tag . "\n";

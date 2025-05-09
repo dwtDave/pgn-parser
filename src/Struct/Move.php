@@ -5,7 +5,8 @@ namespace HueHue\PgnParser\Struct;
 /**
  * Represents a chess move.
  */
-class Move {
+class Move 
+{
 	/**
 	 * @var string The Standard Algebraic Notation (SAN) representation of the move.
 	 */
@@ -40,7 +41,8 @@ class Move {
 	 * @param bool $isWhiteMove True if the move is a white move, false if black.
 	 * @param string|null $comment Comment on the move.
 	 */
-	public function __construct(string $san, int $number, bool $isWhiteMove, string $comment = null) {
+	public function __construct(string $san, int $number, bool $isWhiteMove, string $comment = null) 
+	{
 		$this->san = $san;
 		$this->number = $number;
 		$this->isWhiteMove = $isWhiteMove;
@@ -72,7 +74,8 @@ class Move {
 	 *
 	 * @param string $comment The comment text.
 	 */
-	public function setComment(string $comment): void {
+	public function setComment(string $comment): void 
+	{
 		$this->comment = $comment;
 	}
 	
@@ -81,7 +84,8 @@ class Move {
 	 *
 	 * @param string $variation The variation text.
 	 */
-	public function addVariation(string $variation): void {
+	public function addVariation(string $variation): void 
+	{
 		$this->variations[] = $variation;
 	}
 
@@ -90,7 +94,8 @@ class Move {
 	 *
 	 * @return string[]
 	 */
-	public function getVariations(): array {
+	public function getVariations(): array 
+	{
 		return $this->variations;
 	}
 
@@ -99,7 +104,8 @@ class Move {
 	 *
 	 * @return string
 	 */
-	public function __toString(): string {
+	public function __toString(): string 
+	{
 		$moveString = ($this->isWhiteMove ? $this->number . ". " : $this->number . "...") . $this->san;
 		if ($this->comment) {
 			$moveString .= " {{$this->comment}}";

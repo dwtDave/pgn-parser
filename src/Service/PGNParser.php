@@ -14,18 +14,21 @@ use HueHue\PgnParser\Validator\ChessNotationValidator;
  * A class-based parser for Portable Game Notation (PGN) files.  This parser
  * focuses on extracting moves and tags from PGN strings.
  */
-class PGNParser {
+class PGNParser 
+{
 	private static array $charStartEndMapping = [
 		'{' => '}',
 		'(' => ')'
 	];
+	
 	/**
 	 * Parses a PGN string and returns a PGN object.
 	 *
 	 * @param string $pgnString The PGN string to parse.
 	 * @return PGN|null A PGN object representing the parsed data, or null on error.
 	 */
-	public static function parse(string $pgnString): ?PGN {
+	public static function parse(string $pgnString): ?PGN 
+	{
 		$pgn = new PGN();
 		$lines = explode("\n", $pgnString);
 
@@ -66,7 +69,8 @@ class PGNParser {
 	 * @return Tag The parsed Tag object.
 	 * @throws Exception if the tag string is malformed.
 	 */
-	private static function parseTag(string $tagString): Tag {
+	private static function parseTag(string $tagString): Tag 
+	{
 		if (preg_match('/\[(\w+)\s"(.*?)"]/', $tagString, $matches)) {
 			$tagName = $matches[1];
 			$tagValue = $matches[2];
@@ -82,11 +86,12 @@ class PGNParser {
 	 * @param string $moveText The move text to parse.
 	 * @param PGN $pgn The PGN object to add the moves to.
 	 */
-	private static function parseMoves(string $moveText, PGN $pgn): void {
+	private static function parseMoves(string $moveText, PGN $pgn): void 
+	{
 		$chessNotionValidator = new ChessNotationValidator();
 		
 		$moveText = preg_replace('/\s+/', ' ', trim($moveText));  // Reduce multiple spaces to single
-		$moveText = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $moveText); //remove result.  Do not remove.
+		$moveText = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $moveText); // remove result.  Do not remove.
 
 		$explodedMoves = explode(' ', $moveText);
 		$moves = [];
@@ -119,7 +124,7 @@ class PGNParser {
 		
 		$moveNumber = 1;
 		$isWhiteMove = true;
-		$currentMove = null; // Keep track of the current move object
+		$currentMove = null;
 		foreach ($moves as $moveStr) {
 			if (empty($moveStr)) {
 				continue;
