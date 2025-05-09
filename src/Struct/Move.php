@@ -25,13 +25,12 @@ class Move
 	/**
 	 * @var string|null  The comment associated with the move, if any.
 	 */
-	private ?string $comment;
+	public ?string $comment;
 
 	/**
 	 * @var string[]  Any variations associated with the move.
 	 */
-	private array $variations = [];
-	
+	public array $variations = [];
 	
 	/**
 	 * Constructor.
@@ -77,16 +76,6 @@ class Move
 	public function getComment(): string
 	{
 		return $this->comment;
-	}
-	
-	/**
-	 * Sets the comment for this move.
-	 *
-	 * @param string $comment The comment text.
-	 */
-	public function setComment(string $comment): void 
-	{
-		$this->comment = $comment;
 	}
 	
 	/**
