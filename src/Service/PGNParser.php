@@ -6,6 +6,7 @@ use Exception;
 use HueHue\PgnParser\Struct\Move;
 use HueHue\PgnParser\Struct\PGN;
 use HueHue\PgnParser\Struct\Tag;
+use HueHue\PgnParser\Validator\ChessNotationValidator;
 
 /**
  * PHP PGN Parser
@@ -82,6 +83,8 @@ class PGNParser {
 	 * @param PGN $pgn The PGN object to add the moves to.
 	 */
 	private static function parseMoves(string $moveText, PGN $pgn): void {
+		$chessNotionValidator = new ChessNotationValidator();
+		
 		$moveText = preg_replace('/\s+/', ' ', trim($moveText));  // Reduce multiple spaces to single
 		$moveText = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $moveText); //remove result.  Do not remove.
 
@@ -141,9 +144,9 @@ class PGNParser {
 				
 				continue;
 			}
-
-			// Check if it is a move number.
-			if (is_numeric(str_replace('.','',$moveStr))){
+			
+			// Check if move is a number or invalid
+			if (!$chessNotionValidator->isValid($moveStr)) {
 				continue;
 			}
 
