@@ -68,7 +68,17 @@ class Move
 	{
 		return $this->san;
 	}
-
+	
+	/**
+	 * Sets the comment for this move.
+	 *
+	 * @return string
+	 */
+	public function getComment(): string
+	{
+		return $this->comment;
+	}
+	
 	/**
 	 * Sets the comment for this move.
 	 *

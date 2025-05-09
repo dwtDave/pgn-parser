@@ -76,6 +76,37 @@ class PGNParserTest extends TestCase
 	}
 
 	/**
+	 * Test parsing of a PGN string with moves and a comment.
+	 */
+	public function testParseMovesWithComment(): void
+	{
+		$pgnString = "1. e4 c5 {This is a comment} 2. Nf3 d6 3. d4";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(5, $pgn->getMoves());
+		
+		$this->assertEquals('This is a comment', $pgn->getMoves()[1]->getComment());
+	}
+
+	/**
+	 * Test parsing of a PGN string with moves and a comment.
+	 */
+	public function testParseMovesWithComments(): void
+	{
+		$pgnString = "1. e4 c5 {This is a comment} 2. Nf3 d6 {This is a comment} 3. d4";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(5, $pgn->getMoves());
+		
+		$this->assertEquals('This is a comment', $pgn->getMoves()[1]->getComment());
+		$this->assertEquals('This is a comment', $pgn->getMoves()[3]->getComment());
+	}
+
+	/**
 	 * Test parsing of an empty PGN string.
 	 */
 	public function testParseEmptyString(): void
