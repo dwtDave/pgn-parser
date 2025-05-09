@@ -1,0 +1,20 @@
+{
+  "name": "huehue/pgn-parser",
+  "description": "Parse PGN files",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "HueHue",
+      "email": "dev@web-hl.de"
+    }
+  ],
+  "require": {
+    "php": "^8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "HueHue\\PgnParser\\": "src/"
+    }
+  }
+}
