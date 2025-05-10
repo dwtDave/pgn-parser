@@ -39,6 +39,7 @@ class PGNParser
 			if (empty($line)) {
 				continue;
 			}
+
 			foreach (self::$parser as $parser) {
 				if ($parser::supports($line)) {
 					$parser::parse($line, $pgn);

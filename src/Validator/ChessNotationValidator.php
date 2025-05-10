@@ -4,7 +4,7 @@ namespace HueHue\PgnParser\Validator;
 
 final class ChessNotationValidator implements ValidatorInterface
 {
-	public function isValid(mixed $value): bool
+	public static function isValid(mixed $value): bool
 	{
 		$value = trim($value);
 

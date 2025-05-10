@@ -28,9 +28,7 @@ class TagParser implements Parser
 
 	public static function supports(mixed $value): bool
 	{
-		$tagValidator = new TagValidator();
-		
-		if (!$tagValidator->isValid($value)) {
+		if (!TagValidator::isValid($value)) {
 			return false;
 		}
 		

@@ -47,9 +47,7 @@ class MoveParser implements Parser
 				continue;
 			}
 
-			$chessNotionValidator = new ChessNotationValidator();
-
-			if (!$chessNotionValidator->isValid($moveStr)) {
+			if (!ChessNotationValidator::isValid($moveStr)) {
 				continue;
 			}
 			
@@ -68,8 +66,6 @@ class MoveParser implements Parser
 
 	public static function supports(mixed $value): bool
 	{
-		$chessNotionValidator = new ChessNotationValidator();
-		
 		$value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
 		$value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value); // remove result.  Do not remove.
 
@@ -77,7 +73,7 @@ class MoveParser implements Parser
 
 		
 		// Doesnt check all. Can be improved
-		if (!$chessNotionValidator->isValid($explodedMoves[1])) {
+		if (!ChessNotationValidator::isValid($explodedMoves[1])) {
 			return false;
 		}
 		
