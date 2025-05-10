@@ -79,6 +79,16 @@ class Move
 	}
 	
 	/**
+	 * Sets the comment for this move.
+	 *
+	 * @param string $comment The comment text.
+	 */
+	public function setComment(string $comment): void
+	{
+		$this->comment = $comment;
+	}
+
+	/**
 	 * Adds a variation to this move.
 	 *
 	 * @param string $variation The variation text.
@@ -114,4 +124,6 @@ class Move
 		}
 		return $moveString;
 	}
+
+
 }

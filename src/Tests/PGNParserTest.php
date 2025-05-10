@@ -2,8 +2,10 @@
 
 use HueHue\PgnParser\Service\PGNParser;
 use HueHue\PgnParser\Struct\PGN;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(PGNParser::class)]
 class PGNParserTest extends TestCase
 {
 	/**
