@@ -93,7 +93,7 @@ class PGNParserTest extends TestCase
 	}
 
 	/**
-	 * Test parsing of a PGN string with moves and a comment.
+	 * Test parsing of a PGN string with moves and comments.
 	 */
 	public function testParseMovesWithComments(): void
 	{
