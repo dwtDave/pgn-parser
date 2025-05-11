@@ -27,17 +27,33 @@ class PGNParserTest extends TestCase
 		$pgn = PGNParser::parse($pgnString);
 
 		$this->assertInstanceOf(PGN::class, $pgn);
-		$this->assertCount(7, $pgn->getTags()); 
+		$this->assertCount(7, $pgn->getTags());
 		$this->assertCount(44, $pgn->getMoves());
-		
+
 		$this->assertEquals('Test Game', $pgn->getTags()[0]->value);
 		$this->assertEquals('My Home', $pgn->getTags()[1]->value);
 		$this->assertEquals('2024.01.28', $pgn->getTags()[2]->value);
-		
+
 		$this->assertEquals('e4', $pgn->getMoves()[0]->getSan());
 		$this->assertEquals('c5', $pgn->getMoves()[1]->getSan());
 		$this->assertEquals('Nf3', $pgn->getMoves()[2]->getSan());
 	}
+
+    /**
+     * Test parsing of the result tag with a remi result
+     */
+    public function testParseResultRemi(): void
+    {
+        $pgnString = <<<PGN
+		[Result "1/2-1/2"]		
+		PGN;
+        $pgn = PGNParser::parse($pgnString);
+
+        $this->assertInstanceOf(PGN::class, $pgn);
+        $this->assertCount(1, $pgn->getTags());
+
+        $this->assertEquals('1/2-1/2', $pgn->getTags()[0]->value);
+    }
 
 	/**
 	 * Test parsing of a PGN string with only tags.
@@ -107,6 +123,21 @@ class PGNParserTest extends TestCase
 		$this->assertEquals('This is a comment', $pgn->getMoves()[1]->getComment());
 		$this->assertEquals('This is a comment', $pgn->getMoves()[3]->getComment());
 	}
+
+    /**
+     * Test parsing of a PGN string with moves that have a ! for a good move.
+     */
+    public function testParseMovesWithGoodMoveMarker(): void
+    {
+        $pgnString = "1. e4 c5! 2. Nf3 d6";
+        $pgn = PGNParser::parse($pgnString);
+
+        $this->assertInstanceOf(PGN::class, $pgn);
+        $this->assertCount(0, $pgn->getTags());
+        $this->assertCount(4, $pgn->getMoves());
+
+        $this->assertEquals('c5!', $pgn->getMoves()[1]->getSan());
+    }
 
 	/**
 	 * Test parsing of an empty PGN string.
