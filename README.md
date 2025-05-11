@@ -1,5 +1,6 @@
 # PGN Parser
 
+[![Test status](https://github.com/HueHue-dev/pgn-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/HueHue-dev/pgn-parser/actions)
 [![Latest Stable Version](http://poser.pugx.org/huehue/pgn-parser/v)](https://packagist.org/packages/huehue/pgn-parser)
 [![Total Downloads](http://poser.pugx.org/huehue/pgn-parser/downloads)](https://packagist.org/packages/huehue/pgn-parser)
 [![License](http://poser.pugx.org/huehue/pgn-parser/license)](https://packagist.org/packages/huehue/pgn-parser)
