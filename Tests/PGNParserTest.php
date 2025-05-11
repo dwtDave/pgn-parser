@@ -127,18 +127,107 @@ class PGNParserTest extends TestCase
     /**
      * Test parsing of a PGN string with moves that have a ! for a good move.
      */
-    public function testParseMovesWithGoodMoveMarker(): void
+    public function testParseGoodMove(): void
     {
-        $pgnString = "1. e4 c5! 2. Nf3 d6";
+        $pgnString = "1. e4! c5";
         $pgn = PGNParser::parse($pgnString);
 
         $this->assertInstanceOf(PGN::class, $pgn);
         $this->assertCount(0, $pgn->getTags());
-        $this->assertCount(4, $pgn->getMoves());
+        $this->assertCount(2, $pgn->getMoves());
 
-        $this->assertEquals('c5!', $pgn->getMoves()[1]->getSan());
+        $this->assertEquals('e4!', $pgn->getMoves()[0]->getSan());
     }
 
+	/**
+	 * Test parsing of a PGN string with excellent move.
+	 */
+	public function testParseExcellentMove(): void
+	{
+		$pgnString = "1. e4!! c5";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(2, $pgn->getMoves());
+
+		$this->assertEquals('e4!!', $pgn->getMoves()[0]->getSan());
+	}
+	
+	/**
+	 * Test parsing of a PGN string with bad move.
+	 */
+	public function testParseBadMove(): void
+	{
+		$pgnString = "1. e4? c5";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(2, $pgn->getMoves());
+
+		$this->assertEquals('e4?', $pgn->getMoves()[0]->getSan());
+	}
+
+	/**
+	 * Test parsing of a PGN string with interesting move.
+	 */
+	public function testParseInterestingMove(): void
+	{
+		$pgnString = "1. e4!? c5";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(2, $pgn->getMoves());
+
+		$this->assertEquals('e4!?', $pgn->getMoves()[0]->getSan());
+	}
+	
+	/**
+	 * Test parsing of a PGN string with dubious move.
+	 */
+	public function testParseDubiousMove(): void
+	{
+		$pgnString = "1. e4?! c5";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(2, $pgn->getMoves());
+
+		$this->assertEquals('e4?!', $pgn->getMoves()[0]->getSan());
+	}
+	
+	/**
+	 * Test parsing of a PGN string with bad move with check.
+	 */
+	public function testParseBadWithCheckMove(): void
+	{
+		$pgnString = "1. e4#? c5";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(2, $pgn->getMoves());
+
+		$this->assertEquals('e4#?', $pgn->getMoves()[0]->getSan());
+	}
+	
+	/**
+	 * Test parsing of a PGN string with moves that have a marker for good or bad moves.
+	 */
+	public function testParseMovesWithBadOrGoodMoveMarker(): void
+	{
+		$pgnString = "1. e4!! c5? 2. Nf3! d6!?";
+		$pgn = PGNParser::parse($pgnString);
+
+		$this->assertInstanceOf(PGN::class, $pgn);
+		$this->assertCount(0, $pgn->getTags());
+		$this->assertCount(4, $pgn->getMoves());
+
+		$this->assertEquals('c5?', $pgn->getMoves()[1]->getSan());
+	}
 	/**
 	 * Test parsing of an empty PGN string.
 	 */
