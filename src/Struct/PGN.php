@@ -64,9 +64,12 @@ class PGN
         }
         $moveString = '';
         foreach ($this->moves as $move) {
+            if ($move->isWhiteMove) {
+                $moveString .= $move->getNumber().'. ';
+            }
             $moveString .= $move->san.' ';
         }
 
-        return $tagString.$moveString;
+        return trim($tagString.$moveString);
     }
 }
