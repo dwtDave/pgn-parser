@@ -101,20 +101,4 @@ class Move
     {
         return $this->variations;
     }
-
-    /**
-     * Returns a string representation of the move.
-     */
-    public function __toString(): string
-    {
-        $moveString = ($this->isWhiteMove ? $this->number.'. ' : $this->number.'...').$this->san;
-        if ($this->comment) {
-            $moveString .= " {{$this->comment}}";
-        }
-        if (!empty($this->variations)) {
-            $moveString .= ' ('.implode(') (', $this->variations).')';
-        }
-
-        return $moveString;
-    }
 }
