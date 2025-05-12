@@ -3,3 +3,4 @@ vendor
 .phpunit.cache
 .ddev
 .vscode
+.php-cs-fixer.cache

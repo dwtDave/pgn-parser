@@ -5,125 +5,116 @@ namespace HueHue\PgnParser\Struct;
 /**
  * Represents a chess move.
  */
-class Move 
+class Move
 {
-	/**
-	 * @var string The Standard Algebraic Notation (SAN) representation of the move.
-	 */
-	public string $san;
+    /**
+     * @var string the Standard Algebraic Notation (SAN) representation of the move
+     */
+    public string $san;
 
-	/**
-	 * @var int The move number.
-	 */
-	public int $number;
+    /**
+     * @var int the move number
+     */
+    public int $number;
 
-	/**
-	 * @var bool True if the move is a white move, false if it's a black move.
-	 */
-	public bool $isWhiteMove;
+    /**
+     * @var bool true if the move is a white move, false if it's a black move
+     */
+    public bool $isWhiteMove;
 
-	/**
-	 * @var string|null  The comment associated with the move, if any.
-	 */
-	public ?string $comment;
+    /**
+     * @var string|null the comment associated with the move, if any
+     */
+    public ?string $comment;
 
-	/**
-	 * @var string[]  Any variations associated with the move.
-	 */
-	public array $variations = [];
-	
-	/**
-	 * Constructor.
-	 *
-	 * @param string $san The SAN representation of the move.
-	 * @param int $number The move number.
-	 * @param bool $isWhiteMove True if the move is a white move, false if black.
-	 * @param string|null $comment Comment on the move.
-	 */
-	public function __construct(string $san, int $number, bool $isWhiteMove, string $comment = null) 
-	{
-		$this->san = $san;
-		$this->number = $number;
-		$this->isWhiteMove = $isWhiteMove;
-		$this->comment = $comment;
-	}
+    /**
+     * @var string[] any variations associated with the move
+     */
+    public array $variations = [];
 
-	/**
-	 * Returns the move number
-	 *
-	 * @return int
-	 */
-	public function getNumber(): int
-	{
-		return $this->number;
-	}
+    /**
+     * Constructor.
+     *
+     * @param string      $san         the SAN representation of the move
+     * @param int         $number      the move number
+     * @param bool        $isWhiteMove true if the move is a white move, false if black
+     * @param string|null $comment     comment on the move
+     */
+    public function __construct(string $san, int $number, bool $isWhiteMove, ?string $comment = null)
+    {
+        $this->san = $san;
+        $this->number = $number;
+        $this->isWhiteMove = $isWhiteMove;
+        $this->comment = $comment;
+    }
 
-	/**
-	 * Returns the SAN
-	 *
-	 * @return string
-	 */
-	public function getSan(): string
-	{
-		return $this->san;
-	}
-	
-	/**
-	 * Sets the comment for this move.
-	 *
-	 * @return string
-	 */
-	public function getComment(): string
-	{
-		return $this->comment;
-	}
-	
-	/**
-	 * Sets the comment for this move.
-	 *
-	 * @param string $comment The comment text.
-	 */
-	public function setComment(string $comment): void
-	{
-		$this->comment = $comment;
-	}
+    /**
+     * Returns the move number.
+     */
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
 
-	/**
-	 * Adds a variation to this move.
-	 *
-	 * @param string $variation The variation text.
-	 */
-	public function addVariation(string $variation): void 
-	{
-		$this->variations[] = $variation;
-	}
+    /**
+     * Returns the SAN.
+     */
+    public function getSan(): string
+    {
+        return $this->san;
+    }
 
-	/**
-	 * Gets the variations for this move.
-	 *
-	 * @return string[]
-	 */
-	public function getVariations(): array 
-	{
-		return $this->variations;
-	}
+    /**
+     * Sets the comment for this move.
+     */
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
 
-	/**
-	 * Returns a string representation of the move.
-	 *
-	 * @return string
-	 */
-	public function __toString(): string 
-	{
-		$moveString = ($this->isWhiteMove ? $this->number . ". " : $this->number . "...") . $this->san;
-		if ($this->comment) {
-			$moveString .= " {{$this->comment}}";
-		}
-		if (!empty($this->variations)) {
-			$moveString .= " (" . implode(") (", $this->variations) . ")";
-		}
-		return $moveString;
-	}
+    /**
+     * Sets the comment for this move.
+     *
+     * @param string $comment the comment text
+     */
+    public function setComment(string $comment): void
+    {
+        $this->comment = $comment;
+    }
 
+    /**
+     * Adds a variation to this move.
+     *
+     * @param string $variation the variation text
+     */
+    public function addVariation(string $variation): void
+    {
+        $this->variations[] = $variation;
+    }
 
+    /**
+     * Gets the variations for this move.
+     *
+     * @return string[]
+     */
+    public function getVariations(): array
+    {
+        return $this->variations;
+    }
+
+    /**
+     * Returns a string representation of the move.
+     */
+    public function __toString(): string
+    {
+        $moveString = ($this->isWhiteMove ? $this->number.'. ' : $this->number.'...').$this->san;
+        if ($this->comment) {
+            $moveString .= " {{$this->comment}}";
+        }
+        if (!empty($this->variations)) {
+            $moveString .= ' ('.implode(') (', $this->variations).')';
+        }
+
+        return $moveString;
+    }
 }

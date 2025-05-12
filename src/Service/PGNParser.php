@@ -5,53 +5,54 @@ namespace HueHue\PgnParser\Service;
 use HueHue\PgnParser\Struct\PGN;
 
 /**
- * PHP PGN Parser
+ * PHP PGN Parser.
  *
  * A class-based parser for Portable Game Notation (PGN) files.  This parser
  * focuses on extracting moves and tags from PGN strings.
  */
-class PGNParser 
+class PGNParser
 {
-	/**
-	 * Parser and order to iterate through
-	 *
-	 * @var Parser[]
-	 */
-	protected static array $parser = [
-		TagParser::class,
-		MoveParser::class
-	];
-	
-	/**
-	 * Parses a PGN string and returns a PGN object.
-	 *
-	 * @param string $pgnString The PGN string to parse.
-	 * @return PGN|null A PGN object representing the parsed data, or null on error.
-	 */
-	public static function parse(string $pgnString): ?PGN 
-	{
-		$pgn = new PGN();
-		$lines = explode("\n", $pgnString);
+    /**
+     * Parser and order to iterate through.
+     *
+     * @var Parser[]
+     */
+    protected static array $parser = [
+        TagParser::class,
+        MoveParser::class,
+    ];
 
-		foreach ($lines as $line) {
-			$line = trim($line);
+    /**
+     * Parses a PGN string and returns a PGN object.
+     *
+     * @param string $pgnString the PGN string to parse
+     *
+     * @return PGN|null a PGN object representing the parsed data, or null on error
+     */
+    public static function parse(string $pgnString): ?PGN
+    {
+        $pgn = new PGN();
+        $lines = explode("\n", $pgnString);
 
-			if (empty($line)) {
-				continue;
-			}
+        foreach ($lines as $line) {
+            $line = trim($line);
 
-			foreach (self::$parser as $parser) {
-				if ($parser::supports($line)) {
-					$parser::parse($line, $pgn);
-					
-					break;
-				}
-			}
-		}
-		if (count($pgn->moves) === 0 && count($pgn->tags) === 0){
-			return null;
-		}
+            if (empty($line)) {
+                continue;
+            }
 
-		return $pgn;
-	}
+            foreach (self::$parser as $parser) {
+                if ($parser::supports($line)) {
+                    $parser::parse($line, $pgn);
+
+                    break;
+                }
+            }
+        }
+        if (0 === count($pgn->moves) && 0 === count($pgn->tags)) {
+            return null;
+        }
+
+        return $pgn;
+    }
 }
