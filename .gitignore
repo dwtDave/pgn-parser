@@ -1,6 +1,6 @@
 vendor
 .idea
-.phpunit.cache
+--cache-directory
 .ddev
 .vscode
 .php-cs-fixer.cache

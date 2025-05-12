@@ -35,4 +35,4 @@ jobs:
         run: composer cs-fix-validate
         
       - name: Run tests
-        run: composer test
+        run: composer test-ci
