@@ -49,7 +49,7 @@ class PGNParser
                 }
             }
         }
-        if (0 === count($pgn->moves) && 0 === count($pgn->tags)) {
+        if (0 === count($pgn->getMoves()) && 0 === count($pgn->getTags())) {
             return null;
         }
 

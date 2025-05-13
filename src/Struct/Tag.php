@@ -10,28 +10,39 @@ class Tag
     /**
      * @var string the name of the tag
      */
-    public string $name;
+    protected string $name;
 
     /**
      * @var string the value of the tag
      */
-    public string $value;
+    protected string $value;
 
-    /**
-     * Constructor.
-     *
-     * @param string $name  the name of the tag
-     * @param string $value the value of the tag
-     */
     public function __construct(string $name, string $value)
     {
         $this->name = $name;
         $this->value = $value;
     }
 
-    /**
-     * Returns a string representation of the tag.
-     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
+    }
+
     public function __toString(): string
     {
         return sprintf('[%s "%s"]', $this->name, $this->value);

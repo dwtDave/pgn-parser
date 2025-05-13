@@ -10,9 +10,9 @@ describe('parser', function () {
         expect($pgn)->toBeInstanceOf(PGN::class)
             ->and($pgn?->getTags())->toHaveCount(7)
             ->and($pgn?->getMoves())->toHaveCount(44)
-            ->and($pgn?->getTags()[0]->value)->toEqual('Test Game')
-            ->and($pgn?->getTags()[1]->value)->toEqual('My Home')
-            ->and($pgn?->getTags()[2]->value)->toEqual('2024.01.28')
+            ->and($pgn?->getTags()[0]->getValue())->toEqual('Test Game')
+            ->and($pgn?->getTags()[1]->getValue())->toEqual('My Home')
+            ->and($pgn?->getTags()[2]->getValue())->toEqual('2024.01.28')
             ->and($pgn?->getMoves()[0]->getSan())->toEqual('e4')
             ->and($pgn?->getMoves()[1]->getSan())->toEqual('c5')
             ->and($pgn?->getMoves()[2]->getSan())->toEqual('Nf3');

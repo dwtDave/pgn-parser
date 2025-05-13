@@ -10,12 +10,12 @@ class PGN
     /**
      * @var Tag[] an array of Tag objects
      */
-    public array $tags = [];
+    protected array $tags = [];
 
     /**
      * @var Move[] an array of Move objects
      */
-    public array $moves = [];
+    protected array $moves = [];
 
     /**
      * Adds a tag to the PGN game.
@@ -64,10 +64,10 @@ class PGN
         }
         $moveString = '';
         foreach ($this->moves as $move) {
-            if ($move->isWhiteMove) {
+            if ($move->getIsWhiteMove()) {
                 $moveString .= $move->getNumber().'. ';
             }
-            $moveString .= $move->san.' ';
+            $moveString .= $move->getSan().' ';
         }
 
         return trim($tagString.$moveString);

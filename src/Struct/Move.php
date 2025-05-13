@@ -10,27 +10,27 @@ class Move
     /**
      * @var string the Standard Algebraic Notation (SAN) representation of the move
      */
-    public string $san;
+    protected string $san;
 
     /**
      * @var int the move number
      */
-    public int $number;
+    protected int $number;
 
     /**
      * @var bool true if the move is a white move, false if it's a black move
      */
-    public bool $isWhiteMove;
+    protected bool $isWhiteMove;
 
     /**
      * @var string|null the comment associated with the move, if any
      */
-    public ?string $comment;
+    protected ?string $comment;
 
     /**
      * @var string[] any variations associated with the move
      */
-    public array $variations = [];
+    protected array $variations = [];
 
     /**
      * Constructor.
@@ -48,12 +48,24 @@ class Move
         $this->comment = $comment;
     }
 
-    /**
-     * Returns the move number.
-     */
+    public function getIsWhiteMove(): bool
+    {
+        return $this->isWhiteMove;
+    }
+
+    public function setIsWhiteMove(bool $isWhiteMove): void
+    {
+        $this->isWhiteMove = $isWhiteMove;
+    }
+
     public function getNumber(): int
     {
         return $this->number;
+    }
+
+    public function setNumber(int $number): void
+    {
+        $this->number = $number;
     }
 
     /**
@@ -62,6 +74,11 @@ class Move
     public function getSan(): string
     {
         return $this->san;
+    }
+
+    public function setSan(string $san): void
+    {
+        $this->san = $san;
     }
 
     /**
