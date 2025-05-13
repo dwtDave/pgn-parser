@@ -46,7 +46,7 @@ describe('tags', function () {
         expect($pgn)->toBeInstanceOf(PGN::class)
             ->and($pgn?->getTags())->toHaveCount(1)
             ->and($pgn?->getMoves())->toHaveCount(0);
-    })->with('valid_tags');
+    })->with('valid_tag_strings');
 });
 
 describe('moves', function () {
