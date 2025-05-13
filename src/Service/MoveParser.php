@@ -50,7 +50,13 @@ class MoveParser implements Parser
                 continue;
             }
 
-            $move = new Move($moveStr, $moveNumber, $isWhiteMove);
+            preg_match('/(!!|!|!\?|\?\?|\?!|\?)?$/', $moveStr, $matches);
+            $annotation = $matches[0] ?? null;
+            if (null !== $annotation) {
+                $moveStr = str_replace($annotation, '', $moveStr);
+            }
+
+            $move = new Move($moveStr, $moveNumber, $isWhiteMove, $annotation);
             $pgn->addMove($move);
 
             $currentMove = $move;

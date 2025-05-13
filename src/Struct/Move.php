@@ -28,6 +28,11 @@ class Move
     protected ?string $comment;
 
     /**
+     * @var string|null annotation for good or bad moves
+     */
+    protected ?string $annotation;
+
+    /**
      * @var string[] any variations associated with the move
      */
     protected array $variations = [];
@@ -38,13 +43,15 @@ class Move
      * @param string      $san         the SAN representation of the move
      * @param int         $number      the move number
      * @param bool        $isWhiteMove true if the move is a white move, false if black
+     * @param string|null $annotation  annotation for good or bad move
      * @param string|null $comment     comment on the move
      */
-    public function __construct(string $san, int $number, bool $isWhiteMove, ?string $comment = null)
+    public function __construct(string $san, int $number, bool $isWhiteMove, ?string $annotation = null, ?string $comment = null)
     {
         $this->san = $san;
         $this->number = $number;
         $this->isWhiteMove = $isWhiteMove;
+        $this->annotation = $annotation;
         $this->comment = $comment;
     }
 
@@ -99,6 +106,16 @@ class Move
         $this->comment = $comment;
     }
 
+    public function getAnnotation(): ?string
+    {
+        return $this->annotation;
+    }
+
+    public function setAnnotation(?string $annotation): void
+    {
+        $this->annotation = $annotation;
+    }
+
     /**
      * Adds a variation to this move.
      *
@@ -117,5 +134,15 @@ class Move
     public function getVariations(): array
     {
         return $this->variations;
+    }
+
+    public function __toString(): string
+    {
+        $annotation = $this->annotation ?? '';
+        if (null !== $this->comment) {
+            return sprintf('%s%s {%s}', $this->san, $annotation, $this->comment);
+        }
+
+        return $this->san.$annotation;
     }
 }

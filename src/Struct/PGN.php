@@ -60,14 +60,14 @@ class PGN
     {
         $tagString = '';
         foreach ($this->tags as $tag) {
-            $tagString .= $tag."\n";
+            $tagString .= $tag.PHP_EOL;
         }
         $moveString = '';
         foreach ($this->moves as $move) {
             if ($move->getIsWhiteMove()) {
                 $moveString .= $move->getNumber().'. ';
             }
-            $moveString .= $move->getSan().' ';
+            $moveString .= (string) $move.' ';
         }
 
         return trim($tagString.$moveString);

@@ -15,7 +15,10 @@ describe('parser', function () {
             ->and($pgn?->getTags()[2]->getValue())->toEqual('2024.01.28')
             ->and($pgn?->getMoves()[0]->getSan())->toEqual('e4')
             ->and($pgn?->getMoves()[1]->getSan())->toEqual('c5')
-            ->and($pgn?->getMoves()[2]->getSan())->toEqual('Nf3');
+            ->and($pgn?->getMoves()[2]->getSan())->toEqual('Nf3')
+            ->and($pgn?->getMoves()[2]->getAnnotation())->toEqual('!')
+            ->and($pgn?->getMoves()[5]->getAnnotation())->toEqual('??')
+            ->and($pgn?->getMoves()[6]->getAnnotation())->toEqual('!?');
     })->with('valid_full_pgn');
 
     it('parse empty string', function () {
