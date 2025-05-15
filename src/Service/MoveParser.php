@@ -25,7 +25,7 @@ class MoveParser implements Parser
 
         $explodedMoves = explode(' ', $value);
 
-        $moves = self::prepareMoves($explodedMoves);
+        $moves = self::recombineVariationAndComments($explodedMoves);
         $moveNumber = 1;
         $isWhiteMove = true;
         $currentMove = null;
@@ -87,7 +87,7 @@ class MoveParser implements Parser
     /**
      * Combine variations and comments to one again after explode.
      */
-    protected static function prepareMoves(array $notPreparedMoves): array
+    protected static function recombineVariationAndComments(array $notPreparedMoves): array
     {
         $moves = [];
         $moveCount = count($notPreparedMoves);
