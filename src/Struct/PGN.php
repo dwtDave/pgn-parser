@@ -17,37 +17,21 @@ class PGN
      */
     protected array $moves = [];
 
-    /**
-     * Adds a tag to the PGN game.
-     *
-     * @param Tag $tag the Tag object to add
-     */
     public function addTag(Tag $tag): void
     {
         $this->tags[] = $tag;
     }
 
-    /**
-     * Adds a move to the PGN game.
-     *
-     * @param Move $move the Move object to add
-     */
     public function addMove(Move $move): void
     {
         $this->moves[] = $move;
     }
 
-    /**
-     * Returns the moves.
-     */
     public function getMoves(): array
     {
         return $this->moves;
     }
 
-    /**
-     * Returns the tags.
-     */
     public function getTags(): array
     {
         return $this->tags;

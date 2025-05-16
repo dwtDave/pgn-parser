@@ -88,19 +88,11 @@ class Move
         $this->san = $san;
     }
 
-    /**
-     * Sets the comment for this move.
-     */
     public function getComment(): string
     {
         return $this->comment;
     }
 
-    /**
-     * Sets the comment for this move.
-     *
-     * @param string $comment the comment text
-     */
     public function setComment(string $comment): void
     {
         $this->comment = $comment;
