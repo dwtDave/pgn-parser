@@ -1,6 +1,6 @@
 <?php
 
-namespace HueHue\PgnParser\Service;
+namespace HueHue\PgnParser\Parser;
 
 use HueHue\PgnParser\Struct\PGN;
 
