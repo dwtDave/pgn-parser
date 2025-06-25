@@ -27,7 +27,6 @@ class PGN
         $this->moves[] = $move;
     }
 
-
     /**
      * @return array<int, Move>
      */

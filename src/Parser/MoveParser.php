@@ -20,17 +20,16 @@ class MoveParser implements Parser
      * Parses the move text from a PGN string and adds Move objects to the PGN object.
      *
      * @param mixed $value The PGN move text to parse
-     * @param PGN $pgn the PGN object to add the moves to
+     * @param PGN   $pgn   the PGN object to add the moves to
      */
     public static function parse(mixed $value, PGN $pgn): void
     {
-        
         if (!is_string($value)) {
             return;
         }
-        
+
         $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
-        if ($value === null) {
+        if (null === $value) {
             return;
         }
         $explodedMoves = explode(' ', $value);
@@ -83,25 +82,25 @@ class MoveParser implements Parser
      * Check if the value can be parsed by this parser.
      *
      * @param mixed $value The value to check
+     *
      * @return bool True if the value can be parsed, false otherwise
      */
     public static function supports(mixed $value): bool
     {
-        
         if (!is_string($value)) {
             return false;
         }
-        
+
         $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
-        if ($value === null) {
+        if (null === $value) {
             return false;
         }
-        
+
         $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
-        if ($value === null) {
+        if (null === $value) {
             return false;
         }
-        
+
         $explodedMoves = explode(' ', $value);
 
         // Doesnt check all. Can be improved
@@ -114,8 +113,9 @@ class MoveParser implements Parser
 
     /**
      * Combine variations and comments to one again after explode.
-     * 
+     *
      * @param array<int, string> $notPreparedMoves
+     *
      * @return array<int, string>
      */
     protected static function recombineVariationAndComments(array $notPreparedMoves): array

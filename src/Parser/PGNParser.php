@@ -16,7 +16,6 @@ class PGNParser
      * Parser and order to iterate through.
      *
      * @var array<int, class-string<Parser>>
-     * 
      */
     protected static array $parser = [
         TagParser::class,
