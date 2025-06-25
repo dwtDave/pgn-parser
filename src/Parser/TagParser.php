@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HueHue\PgnParser\Parser;
 
 use HueHue\PgnParser\Struct\PGN;
@@ -15,12 +17,13 @@ class TagParser implements Parser
      */
     public static function parse(mixed $value, PGN $pgn): void
     {
-        preg_match('/\[(\w+)\s"(.*?)"]/', $value, $matches);
+         //Create a Tag if the regex matches successfully.
+         if (preg_match('/\[(\w+)\s"(.*?)"]/', $value, $matches)) {
+            $tagName = $matches[1];
+            $tagValue = $matches[2];
 
-        $tagName = $matches[1];
-        $tagValue = $matches[2];
-
-        $pgn->addTag(new Tag($tagName, $tagValue));
+            $pgn->addTag(new Tag($tagName, $tagValue));
+        }
     }
 
     public static function supports(mixed $value): bool

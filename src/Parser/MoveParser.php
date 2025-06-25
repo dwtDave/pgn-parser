@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HueHue\PgnParser\Parser;
 
 use HueHue\PgnParser\Struct\Move;
@@ -91,6 +93,11 @@ class MoveParser implements Parser
             return false;
         }
 
+        // Regular expression to check for a move number like "1." at the beginning of the string
+        if (!preg_match('/^\d+\.\s/', $value)) {
+            return false;
+        }
+
         $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
         if (null === $value) {
             return false;
@@ -105,6 +112,10 @@ class MoveParser implements Parser
 
         // Doesnt check all. Can be improved
         if (!isset($explodedMoves[1]) || !ChessNotationValidator::isValid($explodedMoves[1])) {
+            return false;
+        }
+
+        if (isset($explodedMoves[2]) && !ChessNotationValidator::isValid($explodedMoves[2])) {
             return false;
         }
 
@@ -124,8 +135,13 @@ class MoveParser implements Parser
         $moveCount = count($notPreparedMoves);
         $parts = [];
         $startChar = '';
-        for ($i = 1; $i < $moveCount; ++$i) {
+        for ($i = 0; $i < $moveCount; ++$i) {
             if (empty($notPreparedMoves[$i])) {
+                continue;
+            }
+
+            // Skip move numbers
+            if (preg_match('/^\d+\.$/', $notPreparedMoves[$i])) {
                 continue;
             }
 
@@ -142,6 +158,9 @@ class MoveParser implements Parser
                 $parts[] = $notPreparedMoves[$i];
                 if (str_ends_with($notPreparedMoves[$i], self::$charStartEndMapping[$startChar])) {
                     $fullString = implode(' ', $parts);
+                    if ('(' === $startChar) {
+                        $fullString = str_replace(' ', '', $fullString);
+                    }
                     $moves[] = $fullString;
 
                     $parts = [];

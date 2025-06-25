@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HueHue\PgnParser\Struct;
 
 /**
@@ -88,12 +90,12 @@ class Move
         $this->san = $san;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment): void
+    public function setComment(?string $comment): void
     {
         $this->comment = $comment;
     }

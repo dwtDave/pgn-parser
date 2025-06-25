@@ -13,6 +13,13 @@ dataset('valid_tag_strings', [
     '[Result "1/2-1/2"]',
 ]);
 
+dataset('invalid_tag_strings', [
+    'Event "Test Game"]',
+    '[Event "Test Game"',
+    'Event "Test Game"',
+    '1. e4 c5',
+]);
+
 dataset('valid_tags', [
     new Tag('Event', 'Test Event'),
     new Tag('Round', '1'),
