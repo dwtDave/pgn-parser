@@ -168,6 +168,17 @@ class MoveParser implements Parser
                     break;
                 }
                 ++$i;
+                // Safety check: prevent going beyond array bounds
+                if ($i >= $moveCount) {
+                    // If we reach the end without finding a closing character,
+                    // treat the remaining parts as a single move
+                    $fullString = implode(' ', $parts);
+                    if ('(' === $startChar) {
+                        $fullString = str_replace(' ', '', $fullString);
+                    }
+                    $moves[] = $fullString;
+                    break;
+                }
             }
         }
 

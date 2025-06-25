@@ -29,7 +29,7 @@
   },
   "scripts": {
     "analyse": "vendor/bin/phpstan analyse",
-    "test": " ./vendor/bin/pest",
+    "test": "./vendor/bin/pest",
     "test-coverage": "./vendor/bin/pest --coverage --min=90",
     "herd-test-coverage": "herd coverage ./vendor/bin/pest --coverage --min=90",
     "test-ci": "./vendor/bin/pest --ci",

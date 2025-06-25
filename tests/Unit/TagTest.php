@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit;
+
 use HueHue\PgnParser\Struct\Tag;
 
 describe('moves', function () {
