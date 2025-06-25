@@ -10,6 +10,6 @@ describe('chess notation validator', static function () {
     })->with('valid_moves');
 
     it('invalid moves', function (string $move) {
-        expect(ChessNotationValidator::isValid($move))->ToBeFalse();
+        expect(ChessNotationValidator::isValid($move))->toBeFalse();
     })->with('invalid_moves');
 });
