@@ -11,14 +11,15 @@ use HueHue\PgnParser\Validator\TagValidator;
 class TagParser implements Parser
 {
     /**
-     * Parses a single PGN tag from a string.
+     * Parses a single PGN tag from a string and adds it to the PGN object.
      *
-     * @return void the parsed Tag object
+     * @param mixed $value the string to parse
+     * @param PGN   $pgn   the PGN object to add the parsed tag to
      */
     public static function parse(mixed $value, PGN $pgn): void
     {
         // Create a Tag if the regex matches successfully.
-        if (preg_match('/\[(\w+)\s"(.*?)"]/', $value, $matches)) {
+        if (preg_match('/^\[(\w+)\s"(.*?)"\]$/', $value, $matches)) {
             $tagName = $matches[1];
             $tagValue = $matches[2];
 

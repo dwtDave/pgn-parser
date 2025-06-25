@@ -8,9 +8,13 @@ final class TagValidator implements ValidatorInterface
 {
     public static function isValid(mixed $value): bool
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         $value = trim($value);
 
-        if (preg_match('/\[(\w+)\s"(.*?)"]/', $value)) {
+        if (preg_match('/^\[(\w+)\s"(.*?)"\]$/', $value)) {
             return true;
         }
 
