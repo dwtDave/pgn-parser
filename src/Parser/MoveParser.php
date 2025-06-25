@@ -8,6 +8,9 @@ use HueHue\PgnParser\Validator\ChessNotationValidator;
 
 class MoveParser implements Parser
 {
+    /**
+     * @var array<string, string>
+     */
     private static array $charStartEndMapping = [
         '{' => '}',
         '(' => ')',
@@ -16,13 +19,20 @@ class MoveParser implements Parser
     /**
      * Parses the move text from a PGN string and adds Move objects to the PGN object.
      *
+     * @param mixed $value The PGN move text to parse
      * @param PGN $pgn the PGN object to add the moves to
      */
     public static function parse(mixed $value, PGN $pgn): void
     {
-        $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
-        $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value); // remove result.  Do not remove.
-
+        
+        if (!is_string($value)) {
+            return;
+        }
+        
+        $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
+        if ($value === null) {
+            return;
+        }
         $explodedMoves = explode(' ', $value);
 
         $moves = self::recombineVariationAndComments($explodedMoves);
@@ -69,15 +79,33 @@ class MoveParser implements Parser
         }
     }
 
+    /**
+     * Check if the value can be parsed by this parser.
+     *
+     * @param mixed $value The value to check
+     * @return bool True if the value can be parsed, false otherwise
+     */
     public static function supports(mixed $value): bool
     {
+        
+        if (!is_string($value)) {
+            return false;
+        }
+        
         $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
-        $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value); // remove result.  Do not remove.
-
+        if ($value === null) {
+            return false;
+        }
+        
+        $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
+        if ($value === null) {
+            return false;
+        }
+        
         $explodedMoves = explode(' ', $value);
 
         // Doesnt check all. Can be improved
-        if (!ChessNotationValidator::isValid($explodedMoves[1])) {
+        if (!isset($explodedMoves[1]) || !ChessNotationValidator::isValid($explodedMoves[1])) {
             return false;
         }
 
@@ -86,6 +114,9 @@ class MoveParser implements Parser
 
     /**
      * Combine variations and comments to one again after explode.
+     * 
+     * @param array<int, string> $notPreparedMoves
+     * @return array<int, string>
      */
     protected static function recombineVariationAndComments(array $notPreparedMoves): array
     {

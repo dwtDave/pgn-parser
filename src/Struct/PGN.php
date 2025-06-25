@@ -27,11 +27,18 @@ class PGN
         $this->moves[] = $move;
     }
 
+
+    /**
+     * @return array<int, Move>
+     */
     public function getMoves(): array
     {
         return $this->moves;
     }
 
+    /**
+     * @return array<int, Tag>
+     */
     public function getTags(): array
     {
         return $this->tags;
