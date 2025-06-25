@@ -14,7 +14,7 @@ final class TagValidator implements ValidatorInterface
 
         $value = trim($value);
 
-        if (preg_match('/^\[(\w+)\s"(.*?)"\]$/', $value)) {
+        if (preg_match('/^\[([A-Za-z][A-Za-z0-9_-]*)\s"(.*?)"\]$/', $value)) {
             return true;
         }
 

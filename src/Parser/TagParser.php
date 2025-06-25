@@ -19,7 +19,7 @@ class TagParser implements Parser
     public static function parse(mixed $value, PGN $pgn): void
     {
         // Create a Tag if the regex matches successfully.
-        if (preg_match('/^\[(\w+)\s"(.*?)"\]$/', $value, $matches)) {
+        if (preg_match('/^\[([A-Za-z][A-Za-z0-9_-]*)\s"(.*?)"\]$/', $value, $matches)) {
             $tagName = $matches[1];
             $tagValue = $matches[2];
 
