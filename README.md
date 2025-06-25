@@ -2,7 +2,7 @@
 
 [![Test status](https://github.com/dwtDave/pgn-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/HueHue-dev/pgn-parser/actions)
 [![Latest Stable Version](http://poser.pugx.org/huehue/pgn-parser/v)](https://packagist.org/packages/huehue/pgn-parser)
-[![License](http://poser.pugx.org/dwtDave/pgn-parser/license)]
+
 
 A PHP library for parsing Portable Game Notation (PGN) files. This library is designed to extract chess game metadata and moves from PGN strings. It validates move syntax, including support for move annotations.
 
