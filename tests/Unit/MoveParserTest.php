@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Parser\MoveParser;
+use dwtie\PgnParser\Parser\MoveParser;
 
 class MoveParserProxy extends MoveParser
 {

@@ -1,12 +1,16 @@
 {
-  "name": "huehue/pgn-parser",
+  "name": "dwtie/pgn-parser",
   "description": "Parse PGN files",
   "type": "library",
   "license": "MIT",
   "authors": [
     {
-      "name": "HueHue",
+      "name": "HueHue", 
       "email": "dev@web-hl.de"
+    },
+    {
+      "name": "David O'Connell",
+      "email": "david@dwt.ie"
     }
   ],
   "require": {
@@ -14,7 +18,7 @@
   },
   "autoload": {
     "psr-4": {
-      "HueHue\\PgnParser\\": "src/"
+      "dwtie\\PgnParser\\": "src/"
     }
   },
   "autoload-dev": {

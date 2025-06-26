@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Parser;
+namespace dwtie\PgnParser\Parser;
 
-use HueHue\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Struct\PGN;
 
 /**
  * PHP PGN Parser.

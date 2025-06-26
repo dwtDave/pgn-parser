@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Validator\ChessNotationValidator;
+use dwtie\PgnParser\Validator\ChessNotationValidator;
 
 describe('chess notation validator', static function () {
     it('valid moves', function (string $move) {

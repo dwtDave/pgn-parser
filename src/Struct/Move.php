@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Struct;
+namespace dwtie\PgnParser\Struct;
 
 /**
  * Represents a chess move.
@@ -35,7 +35,7 @@ class Move
     protected ?string $annotation;
 
     /**
-     * @var string[] any variations associated with the move
+     * @var PGN[] any variations associated with the move
      */
     protected array $variations = [];
 
@@ -113,9 +113,9 @@ class Move
     /**
      * Adds a variation to this move.
      *
-     * @param string $variation the variation text
+     * @param PGN $variation the variation PGN
      */
-    public function addVariation(string $variation): void
+    public function addVariation(PGN $variation): void
     {
         $this->variations[] = $variation;
     }
@@ -123,7 +123,7 @@ class Move
     /**
      * Gets the variations for this move.
      *
-     * @return string[]
+     * @return PGN[]
      */
     public function getVariations(): array
     {
@@ -133,10 +133,16 @@ class Move
     public function __toString(): string
     {
         $annotation = $this->annotation ?? '';
+        $str = $this->san.$annotation;
+
         if (null !== $this->comment) {
-            return sprintf('%s%s {%s}', $this->san, $annotation, $this->comment);
+            $str .= sprintf(' {%s}', $this->comment);
         }
 
-        return $this->san.$annotation;
+        foreach ($this->variations as $variation) {
+            $str .= sprintf(' (%s)', (string) $variation);
+        }
+
+        return $str;
     }
 }

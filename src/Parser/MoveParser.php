@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Parser;
+namespace dwtie\PgnParser\Parser;
 
-use HueHue\PgnParser\Struct\Move;
-use HueHue\PgnParser\Struct\PGN;
-use HueHue\PgnParser\Validator\ChessNotationValidator;
+use dwtie\PgnParser\Struct\Move;
+use dwtie\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Validator\ChessNotationValidator;
 
 class MoveParser implements Parser
 {
@@ -30,29 +30,155 @@ class MoveParser implements Parser
             return;
         }
 
+        self::parseMoveSequence($value, $pgn, 1, true);
+    }
+
+    /**
+     * Check if the value can be parsed by this parser.
+     *
+     * @param mixed $value The value to check
+     *
+     * @return bool True if the value can be parsed, false otherwise
+     */
+    public static function supports(mixed $value): bool
+    {
+        if (!is_string($value)) {
+            return false;
+        }
+
+        // Regular expression to check for a move number like "1." at the beginning of the string
+        if (!preg_match('/^\d+\.{1,3}\s/', $value)) {
+            return false;
+        }
+
+        $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
+        if (null === $value) {
+            return false;
+        }
+
         $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
         if (null === $value) {
-            return;
+            return false;
         }
+
         $explodedMoves = explode(' ', $value);
+        $recombined = self::recombineVariationAndComments($explodedMoves);
+
+        $moveTokens = array_values(array_filter($recombined, function ($token) {
+            return !str_starts_with($token, '{')
+                   && !str_starts_with($token, '(')
+                   && !preg_match('/^\d+\.\.?\.?$/', $token);
+        }));
+
+        if (!isset($moveTokens[0]) || !ChessNotationValidator::isValid($moveTokens[0])) {
+            return false;
+        }
+
+        if (isset($moveTokens[1]) && !ChessNotationValidator::isValid($moveTokens[1])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Combine variations and comments to one again after explode.
+     *
+     * @param array<int, string> $notPreparedMoves
+     *
+     * @return array<int, string>
+     */
+    protected static function recombineVariationAndComments(array $notPreparedMoves): array
+    {
+        $moves = [];
+        $moveCount = count($notPreparedMoves);
+        $i = 0;
+
+        while ($i < $moveCount) {
+            $token = $notPreparedMoves[$i];
+
+            if (empty($token)) {
+                ++$i;
+                continue;
+            }
+
+            if (preg_match('/^\d+\.\.?\.?$/', $token)) {
+                $moves[] = $token;
+            } elseif (str_starts_with($token, '{') || str_starts_with($token, '(')) {
+                $startChar = $token[0];
+                $endChar = self::$charStartEndMapping[$startChar];
+                $level = 0;
+                $parts = [];
+                for (; $i < $moveCount; ++$i) {
+                    $part = $notPreparedMoves[$i];
+                    if (empty($part)) {
+                        continue;
+                    }
+
+                    $parts[] = $part;
+                    $level += substr_count($part, $startChar);
+                    $level -= substr_count($part, $endChar);
+
+                    if (0 === $level) {
+                        break;
+                    }
+                }
+
+                $recombined = implode(' ', $parts);
+                $recombined = trim(substr($recombined, 1, -1));
+
+                $moves[] = $startChar.$recombined.$endChar;
+            } else {
+                $moves[] = $token;
+            }
+            ++$i;
+        }
+
+        return $moves;
+    }
+
+    private static function parseMoveSequence(string $moveText, PGN $pgn, int $startMoveNumber, bool $isWhiteToMove): void
+    {
+        $moveNumber = $startMoveNumber;
+        $isWhiteMove = $isWhiteToMove;
+        $currentMove = null;
+
+        $explodedMoves = explode(' ', $moveText);
 
         $moves = self::recombineVariationAndComments($explodedMoves);
-        $moveNumber = 1;
-        $isWhiteMove = true;
-        $currentMove = null;
         foreach ($moves as $moveStr) {
+            if (preg_match('/^(\d+)\.$/', $moveStr, $matches)) {
+                $moveNumber = (int) $matches[1];
+                $isWhiteMove = true;
+
+                continue;
+            }
+
+            if (preg_match('/^(\d+)\.\.\.$/', $moveStr, $matches)) {
+                $moveNumber = (int) $matches[1];
+                $isWhiteMove = false;
+
+                continue;
+            }
+
             if (str_starts_with($moveStr, '{')) {
                 $comment = substr($moveStr, 1, -1);
-
                 $currentMove?->setComment($comment);
 
                 continue;
             }
 
             if (str_starts_with($moveStr, '(')) {
-                $variation = substr($moveStr, 1, -1);
+                $variationString = substr($moveStr, 1, -1);
+                $variationPgn = new PGN();
 
-                $currentMove?->addVariation($variation);
+                // A variation is an alternative to the next move in the main line.
+                // So the state for the variation is the current state of the parser.
+                self::parseMoveSequence($variationString, $variationPgn, $moveNumber, $isWhiteMove);
+
+                if (count($variationPgn->getMoves()) > 0) {
+                    $currentMove?->addVariation($variationPgn);
+                }
 
                 continue;
             }
@@ -72,116 +198,11 @@ class MoveParser implements Parser
 
             $currentMove = $move;
 
-            if ($isWhiteMove) {
+            if (!$isWhiteMove) {
                 ++$moveNumber;
             }
 
             $isWhiteMove = !$isWhiteMove;
         }
-    }
-
-    /**
-     * Check if the value can be parsed by this parser.
-     *
-     * @param mixed $value The value to check
-     *
-     * @return bool True if the value can be parsed, false otherwise
-     */
-    public static function supports(mixed $value): bool
-    {
-        if (!is_string($value)) {
-            return false;
-        }
-
-        // Regular expression to check for a move number like "1." at the beginning of the string
-        if (!preg_match('/^\d+\.\s/', $value)) {
-            return false;
-        }
-
-        $value = preg_replace('/\s+/', ' ', $value);  // Reduce multiple spaces to single
-        if (null === $value) {
-            return false;
-        }
-
-        $value = preg_replace('/(1-0|0-1|1\/2-1\/2|\*)$/', '', $value);
-        if (null === $value) {
-            return false;
-        }
-
-        $explodedMoves = explode(' ', $value);
-
-        // Doesnt check all. Can be improved
-        if (!isset($explodedMoves[1]) || !ChessNotationValidator::isValid($explodedMoves[1])) {
-            return false;
-        }
-
-        if (isset($explodedMoves[2]) && !ChessNotationValidator::isValid($explodedMoves[2])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Combine variations and comments to one again after explode.
-     *
-     * @param array<int, string> $notPreparedMoves
-     *
-     * @return array<int, string>
-     */
-    protected static function recombineVariationAndComments(array $notPreparedMoves): array
-    {
-        $moves = [];
-        $moveCount = count($notPreparedMoves);
-        $parts = [];
-        $startChar = '';
-        for ($i = 0; $i < $moveCount; ++$i) {
-            if (empty($notPreparedMoves[$i])) {
-                continue;
-            }
-
-            // Skip move numbers
-            if (preg_match('/^\d+\.$/', $notPreparedMoves[$i])) {
-                continue;
-            }
-
-            if (!str_starts_with($notPreparedMoves[$i], '{') && !str_starts_with($notPreparedMoves[$i], '(')) {
-                $moves[] = $notPreparedMoves[$i];
-                continue;
-            }
-
-            if ($notPreparedMoves[$i][0] !== $startChar) {
-                $startChar = $notPreparedMoves[$i][0];
-            }
-
-            while (true) {
-                $parts[] = $notPreparedMoves[$i];
-                if (str_ends_with($notPreparedMoves[$i], self::$charStartEndMapping[$startChar])) {
-                    $fullString = implode(' ', $parts);
-                    if ('(' === $startChar) {
-                        $fullString = str_replace(' ', '', $fullString);
-                    }
-                    $moves[] = $fullString;
-
-                    $parts = [];
-
-                    break;
-                }
-                ++$i;
-                // Safety check: prevent going beyond array bounds
-                if ($i >= $moveCount) {
-                    // If we reach the end without finding a closing character,
-                    // treat the remaining parts as a single move
-                    $fullString = implode(' ', $parts);
-                    if ('(' === $startChar) {
-                        $fullString = str_replace(' ', '', $fullString);
-                    }
-                    $moves[] = $fullString;
-                    break;
-                }
-            }
-        }
-
-        return $moves;
     }
 }

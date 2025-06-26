@@ -2,24 +2,23 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Parser;
+namespace dwtie\PgnParser\Parser;
 
-use HueHue\PgnParser\Struct\PGN;
-use HueHue\PgnParser\Struct\Tag;
-use HueHue\PgnParser\Validator\TagValidator;
+use dwtie\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Struct\Tag;
+use dwtie\PgnParser\Validator\TagValidator;
 
 class TagParser implements Parser
 {
     /**
-     * Parses a single PGN tag from a string and adds it to the PGN object.
+     * Parses a single PGN tag from a string.
      *
-     * @param mixed $value the string to parse
-     * @param PGN   $pgn   the PGN object to add the parsed tag to
+     * @return void the parsed Tag object
      */
     public static function parse(mixed $value, PGN $pgn): void
     {
         // Create a Tag if the regex matches successfully.
-        if (preg_match('/^\[([A-Za-z][A-Za-z0-9_-]*)\s"(.*?)"\]$/', $value, $matches)) {
+        if (preg_match('/\[(\w+)\s"(.*?)"]/', $value, $matches)) {
             $tagName = $matches[1];
             $tagValue = $matches[2];
 

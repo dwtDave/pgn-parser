@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Struct\Tag;
+use dwtie\PgnParser\Struct\Tag;
 
 describe('moves', function () {
     it('tag to string', function (Tag $tag) {
