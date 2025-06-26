@@ -44,6 +44,47 @@ PGN;
 
         expect($output)->not->toContain('[FEN');
     });
+
+    test('it handles a PGN with a variation', function () {
+        $pgnString = '1. e4 (1. d4 d5) e5';
+        $pgn = PGNParser::parse($pgnString);
+
+        $moves = $pgn->getMoves();
+        expect($moves)->toHaveCount(2);
+        expect($moves[0]->getSan())->toBe('e4');
+        expect($moves[1]->getSan())->toBe('e5');
+
+        $variations = $moves[0]->getVariations();
+        expect($variations)->toHaveCount(1);
+
+        $variationPgn = $variations[0];
+        expect($variationPgn)->toBeInstanceOf(PGN::class);
+
+        $variationMoves = $variationPgn->getMoves();
+        expect($variationMoves)->toHaveCount(2);
+        expect($variationMoves[0]->getSan())->toBe('d4');
+        expect($variationMoves[1]->getSan())->toBe('d5');
+    });
+
+    test('it correctly formats a variation starting with a black move', function () {
+        $pgnString = '1. e4 e5 (1... Nf6 2. d3) 2. Nf3 Nc6';
+        $pgn = PGNParser::parse($pgnString);
+
+        // The expected string should include the '...' notation for the black move starting the variation.
+        $expectedString = '1. e4 e5 (1... Nf6 2. d3) 2. Nf3 Nc6';
+
+        expect((string) $pgn)->toBe($expectedString);
+    });
+
+    test('it correctly formats a PGN starting with a black move from a FEN', function () {
+        $fenString = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+        $pgnString = <<<PGN
+[FEN "$fenString"]
+1... Nf6 2. Nc3
+PGN;
+        $pgn = PGNParser::parse($pgnString);
+        expect((string) $pgn)->toContain('1... Nf6 2. Nc3');
+    });
 });
 
 // Grouping tests related to parsing and handling FEN data

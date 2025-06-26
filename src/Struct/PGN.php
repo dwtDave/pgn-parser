@@ -78,13 +78,19 @@ class PGN
         }
 
         $moveString = '';
+        $lastMove = null;
         foreach ($this->moves as $move) {
             if ($move->getIsWhiteMove()) {
                 $moveString .= $move->getNumber().'. ';
+            } elseif (null === $lastMove || $lastMove->getNumber() !== $move->getNumber()) {
+                // This is a black move starting a sequence (e.g. in a variation or from a FEN)
+                $moveString .= $move->getNumber().'... ';
             }
             $moveString .= (string) $move.' ';
+            $lastMove = $move;
         }
 
-        return trim($tagString.$moveString);
+        // Trim the move string first to remove the final trailing space before combining with tags.
+        return trim($tagString.trim($moveString));
     }
 }
