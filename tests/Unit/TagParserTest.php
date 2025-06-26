@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Parser\TagParser;
-use HueHue\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Parser\TagParser;
+use dwtie\PgnParser\Struct\PGN;
 
 describe('TagParser', function () {
     it('supports valid tags', function (string $tagString) {

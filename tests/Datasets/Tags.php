@@ -1,6 +1,6 @@
 <?php
 
-use HueHue\PgnParser\Struct\Tag;
+use dwtie\PgnParser\Struct\Tag;
 
 dataset('valid_tag_strings', [
     '[Event "Test Game"]',

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Parser\PGNParser;
-use HueHue\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Parser\PGNParser;
+use dwtie\PgnParser\Struct\PGN;
 
 describe('parser', function () {
     it('parse full pgn', function (string $pgnString) {

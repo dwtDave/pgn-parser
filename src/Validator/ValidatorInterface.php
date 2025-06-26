@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Validator;
+namespace dwtie\PgnParser\Validator;
 
 interface ValidatorInterface
 {

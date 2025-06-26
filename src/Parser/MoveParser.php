@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Parser;
+namespace dwtie\PgnParser\Parser;
 
-use HueHue\PgnParser\Struct\Move;
-use HueHue\PgnParser\Struct\PGN;
-use HueHue\PgnParser\Validator\ChessNotationValidator;
+use dwtie\PgnParser\Struct\Move;
+use dwtie\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Validator\ChessNotationValidator;
 
 class MoveParser implements Parser
 {

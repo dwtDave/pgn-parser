@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Struct\Fen;
+use dwtie\PgnParser\Struct\Fen;
 
 describe('FEN', function () {
     it('parses a full FEN string correctly', function () {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HueHue\PgnParser\Struct;
+namespace dwtie\PgnParser\Struct;
 
 /**
  * Represents a chess move.

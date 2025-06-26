@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use HueHue\PgnParser\Parser\PGNParser;
-use HueHue\PgnParser\Struct\Fen;
-use HueHue\PgnParser\Struct\Move;
-use HueHue\PgnParser\Struct\PGN;
+use dwtie\PgnParser\Parser\PGNParser;
+use dwtie\PgnParser\Struct\Fen;
+use dwtie\PgnParser\Struct\Move;
+use dwtie\PgnParser\Struct\PGN;
 
 // Grouping tests related to the PGN __toString() method
 describe('PGN __toString', function () {
