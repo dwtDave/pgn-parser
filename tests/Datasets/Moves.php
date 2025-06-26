@@ -32,10 +32,10 @@ dataset('invalid_move_strings_for_supports', [
 dataset('recombine_variations_and_comments', [
     [
         'input' => ['1.', 'e4', 'c5', '{This', 'is', 'a', 'comment}', '2.', 'Nf3', 'd6'],
-        'expected' => ['e4', 'c5', '{This is a comment}', 'Nf3', 'd6'],
+        'expected' => ['1.', 'e4', 'c5', '{This is a comment}', '2.', 'Nf3', 'd6'],
     ],
     [
         'input' => ['1.', 'e4', 'c5', '{This', 'is', 'a', 'comment}', '(', 'e5', ')', '2.', 'Nf3', 'd6'],
-        'expected' => ['e4', 'c5', '{This is a comment}', '(e5)', 'Nf3', 'd6'],
+        'expected' => ['1.', 'e4', 'c5', '{This is a comment}', '(e5)', '2.', 'Nf3', 'd6'],
     ],
 ]);

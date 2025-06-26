@@ -47,7 +47,7 @@ class MoveParser implements Parser
         }
 
         // Regular expression to check for a move number like "1." at the beginning of the string
-        if (!preg_match('/^\d+\.(\.\.\.)?\s/', $value)) {
+        if (!preg_match('/^\d+\.{1,3}\s/', $value)) {
             return false;
         }
 
